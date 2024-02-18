@@ -6,7 +6,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoginSchema } from "@/schemas";
@@ -38,8 +38,11 @@ const LoginForm = () => {
     startTransition(() => {
       login(values).then((data: any) => {
         setErrorMsg(data.error);
-        setSuccessMsg(data.success);
-        form.reset()
+        console.log("error", data.error);
+        if (data.success) {
+          setSuccessMsg(data.success);
+          form.reset();
+        }
       });
     });
   };

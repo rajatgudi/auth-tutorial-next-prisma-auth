@@ -39,8 +39,10 @@ const RegisterForm = () => {
     startTransition(() => {
       register(values).then((data: any) => {
         setErrorMsg(data.error);
-        setSuccessMsg(data.success);
-        form.reset();
+        if (data.success) {
+          setSuccessMsg(data.success);
+          form.reset();
+        }
       });
     });
   };
