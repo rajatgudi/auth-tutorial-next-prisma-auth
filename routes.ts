@@ -9,7 +9,13 @@ export const publicRoutes = ["/", "/auth/new-verification"];
  * These routes requires authentication
  * @type {string[]}
  */
-export const authRoutes = ["/auth/login", "/auth/register", "/auth/error"];
+export const authRoutes = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/error",
+  "/auth/new-password",
+  "/auth/reset",
+];
 
 //prefix for API authentication routes
 //routes that start with this prefix is used for API authentication
