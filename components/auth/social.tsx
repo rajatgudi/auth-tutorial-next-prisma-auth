@@ -1,8 +1,15 @@
-import React from "react";
+"use client";
+import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { Button } from "../ui/button";
+import { signIn } from "next-auth/react";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 const Social = () => {
+  const handleClick = async (provider: "google" | "github") => {
+    await signIn(provider, {
+      callbackUrl: DEFAULT_LOGIN_REDIRECT,
+    });
+  };
   return (
     <div className="flex items-center w-full gap-x-2">
       <Button
@@ -10,7 +17,7 @@ const Social = () => {
         variant={"outline"}
         className="w-full"
         onClick={() => {
-          alert("Loging in by Google...");
+          handleClick("google");
         }}
       >
         <FcGoogle className="w-5 h-5" />
@@ -20,20 +27,10 @@ const Social = () => {
         variant={"outline"}
         className="w-full"
         onClick={() => {
-          alert("Loging in by Github...");
+          handleClick("github");
         }}
       >
         <FaGithub className="w-5 h-5" />
-      </Button>
-      <Button
-        size={"lg"}
-        variant={"outline"}
-        className="w-full"
-        onClick={() => {
-          alert("Loging in by LinkedIn...");
-        }}
-      >
-        <FaLinkedin className="w-5 h-5" />
       </Button>
     </div>
   );

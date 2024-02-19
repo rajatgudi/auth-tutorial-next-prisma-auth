@@ -18,7 +18,15 @@ import FormError from "../form-error";
 import FormSuccess from "../form-success";
 import { Button } from "../ui/button";
 import CardWrapper from "./card-wrapper";
+import { useSearchParams } from "next/navigation";
+
 const LoginForm = () => {
+  const searchParams = useSearchParams();
+  //when one email id already registered with google and trying to login with same email id from github, shows this error
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with different provider"
+      : "";
   const [isPending, startTransition] = useTransition();
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [successMsg, setSuccessMsg] = useState<string>("");
@@ -94,7 +102,7 @@ const LoginForm = () => {
                 )}
               />
             </div>
-            <FormError message={errorMsg} />
+            <FormError message={errorMsg || urlError} />
             <FormSuccess message={successMsg} />
             <Button disabled={isPending} type="submit" className="w-full">
               Login
