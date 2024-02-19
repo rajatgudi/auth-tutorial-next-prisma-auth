@@ -7,6 +7,8 @@ import { getUserByEmail } from "@/data/user";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
+import { generateVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const isValidatedFields = LoginSchema.safeParse(values);
@@ -15,6 +17,20 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     return { error: "Invalid Fields!" };
   }
   const { email, password } = isValidatedFields.data;
+
+  //check if there is user
+  const exisitngUser = await getUserByEmail(email);
+  if (!exisitngUser || !exisitngUser.email || !exisitngUser.password) {
+    return { error: "Email does not exist!" };
+  }
+  //if existing user did not email verifed send verificaation code to email
+  if (!exisitngUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(
+      exisitngUser.email
+    );
+    await sendVerificationEmail(exisitngUser.email, verificationToken.token);
+    return { success: `Confirmation email sent to ${exisitngUser.email}` };
+  }
   try {
     await signIn("credentials", {
       email,
@@ -31,7 +47,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       }
     }
     // else it wont redirect
-    throw error
+    throw error;
   }
   return { success: "Email Sent" };
 };
@@ -56,6 +72,9 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       password: hashedPassword,
     },
   });
-  // Send verification
-  return { success: "User Created!" };
+  // Sends verification token to email
+
+  const verificationToken = await generateVerificationToken(email);
+  await sendVerificationEmail(email, verificationToken.token);
+  return { success: `Confirmation email sent to ${email}` };
 };
