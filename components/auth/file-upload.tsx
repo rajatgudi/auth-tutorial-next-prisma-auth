@@ -24,9 +24,9 @@ const FileUploader = ({ onFieldChange }: FileUploaderProps) => {
           console.log(`ERROR! ${error.message}`);
         }}
       />
-      {image && (
+      {(user?.image || image) && (
         <Image
-          src={image}
+          src={image || user?.image || ""}
           alt=""
           height={80}
           width={120}
