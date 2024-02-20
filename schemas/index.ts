@@ -25,6 +25,7 @@ export const SettingsSchema = z
     email: z.optional(z.string().email("Invalid Email")),
     password: z.optional(z.string().min(6)),
     newpassword: z.optional(z.string().min(6)),
+    image: z.optional(z.string().url()),
   })
   .refine(
     (data) => {

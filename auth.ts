@@ -50,8 +50,9 @@ export const {
         session.user.name = token.name;
         //@ts-ignore
         session.user.email = token.email;
-          //@ts-ignore
+        //@ts-ignore
         session.user.role = token.role;
+        session.user.image = token.picture;
         //gets isOath from jwt token
         session.user.isOAuth = token.isOAuth as boolean;
       }
@@ -71,6 +72,7 @@ export const {
       token.name = existingUser.name;
       token.email = existingUser.email;
       token.role = existingUser.role;
+      token.picture = existingUser.image;
       return token;
     },
   },
