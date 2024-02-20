@@ -1,6 +1,7 @@
 import { ExtendedUser } from "@/next-auth";
 import React from "react";
 import { Card, CardHeader, CardContent } from "./ui/card";
+import { Badge } from "./ui/badge";
 interface UserInfoProps {
   user?: ExtendedUser;
   label: string;
@@ -30,10 +31,17 @@ const UserInfo = ({ user, label }: UserInfoProps) => {
           <p className="truncate text-sm max-w-[480px] font-mono p-1 bg-slate-100 rounded-md">
             {user?.email}
           </p>
-        </div>    <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+        </div>
+        <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
           <p className="text-sm font-medium">Role</p>
           <p className="truncate text-sm max-w-[480px] font-mono p-1 bg-slate-100 rounded-md">
             {user?.role}
+          </p>
+        </div>
+        <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+          <p className="text-sm font-medium">isOAuth</p>
+          <p className="truncate text-sm max-w-[480px] font-mono p-1 bg-slate-100 rounded-md">
+            <Badge>{user?.isOAuth ? "True" : "False"}</Badge>
           </p>
         </div>
       </CardContent>

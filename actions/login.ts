@@ -57,7 +57,6 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   if (!isValidatedFields.success) {
     return { error: "Invalid Fields!" };
   }
-  console.log("Register", values);
   const { email, name, password } = isValidatedFields.data;
   const existingUser = await getUserByEmail(email);
   if (existingUser) {

@@ -11,7 +11,6 @@ interface LoginButtonProps {
 export const LoginButton = ({ children, asChild, mode }: LoginButtonProps) => {
   const router = useRouter();
   const handleClick = () => {
-    console.log("Login Button Clicked");
     router.push("/auth/login");
   };
   if (mode === "modal") {

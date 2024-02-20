@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "@/auth.config";
 import { db } from "./lib/db";
 import { getUserById } from "./data/user";
+import { getAccontbyUserId } from "./data/account";
 
 export const {
   handlers: { GET, POST },
@@ -37,7 +38,6 @@ export const {
     },
     //extracting id from token and adding to session object
     async session({ token, session }) {
-      console.log({ session }, { sessionToken: token });
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
@@ -45,6 +45,15 @@ export const {
       if (token.role && session.user) {
         //@ts-ignore
         session.user.role = token.role;
+      }
+      if (session.user) {
+        session.user.name = token.name;
+        //@ts-ignore
+        session.user.email = token.email;
+          //@ts-ignore
+        session.user.role = token.role;
+        //gets isOath from jwt token
+        session.user.isOAuth = token.isOAuth as boolean;
       }
       return session;
     },
@@ -55,6 +64,12 @@ export const {
       //store user Role from DB ans store in token
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
+
+      //checks whether its associated account, i.e checks if user logged in from google / git
+      const existingAccount = await getAccontbyUserId(existingUser.id);
+      token.isOAuth = !!existingAccount;
+      token.name = existingUser.name;
+      token.email = existingUser.email;
       token.role = existingUser.role;
       return token;
     },
